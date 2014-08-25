@@ -1,19 +1,21 @@
 from datetime import date, datetime
-from server.core.log import *
+from log import *
+
 
 def timestamp():
-	return '%s %s' % (date.today().isoformat(),
-					  datetime.now().strftime('%I:%M%p'))
+    return '%s %s' % (date.today().isoformat(),
+                      datetime.now().strftime('%I:%M%p'))
+
 
 def version():
-    """
+    """ Return version number
     """
 
     return "0.1"
 
 
-def msg(string, level = INFO):
-    """
+def msg(string, level=INFO):
+    """ Print log message
     """
 
     if level is INFO:

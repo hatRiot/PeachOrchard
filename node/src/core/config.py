@@ -15,7 +15,7 @@ SERVER_PORT = 8000
 DEBUG = True
 
 # node id
-# Set to None if you want to reregister this instance
+# Set to None if you want to re-register this instance
 NODE_ID = None
 
 # this is the absolute path to Peach's log directory

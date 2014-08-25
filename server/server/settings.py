@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 import random
 
-# Build paths inside lthe project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -18,6 +18,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Hard coding a secret key is lame; instead, lets not distribute a key file and randomly generate
 # one at first launch
 #
+
+
 def _generate_secret_key(loc):
     """ Generate a 64 byte random string to set as our secret key; this value
     is used by Django as well as Peach Orchard during node authentication.
@@ -49,7 +51,7 @@ ALLOWED_HOSTS = []
 #           2/
 #               01_02_2014-01-0101/
 #               01_02_2014-01-0102/
-#                   log.txtl
+#                   log.txt
 #
 NODE_DIR = BASE_DIR + '/.nodes'
 if not os.path.isdir(NODE_DIR):
@@ -115,5 +117,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-        (BASE_DIR + '/static'),
-    )
+    (BASE_DIR + '/static'),
+)
