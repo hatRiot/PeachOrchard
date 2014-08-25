@@ -1,0 +1,17 @@
+body {
+  padding-top: 50px;
+}
+
+.starter-template {
+  padding: 40px 100px;
+  text-align: center;
+}
+
+#node-table tr.highlight {
+	background-color: #838b83;
+	cursor:pointer;
+}
+
+tr {
+	cursor: pointer;
+}

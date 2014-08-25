@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+	<p> Rendering crash {{ crash_id }} for node {{ node.id }}</p>
+	<div id="crash-template">
+		<pre style="text-align: left; padding: 0px 0px;">
+			{{ crash }} 
+		</pre>
+	</div>
+{% endblock %}

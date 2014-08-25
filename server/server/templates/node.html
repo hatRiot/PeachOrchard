@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+	{% if not node %}
+		<p>Node not found</p>
+	{% else %}
+		<p>Found {{crashes|length}} crashes for node {{ node.id }}</p>
+		<table class="table table-striped table-hover table-bordered table-condensed node-table">
+			<thead>
+				<tr>
+					<th>Crash Index</th>
+					<th>Crash Time</th>
+					<th>Exception Type</th>
+					<th>Classification</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for crash in crashes %}
+				<tr onclick="crash_select(this.cells[0])">
+					<td>{{ crash.fault_index }}</td>
+					<td>{{ crash.crash_time }}</td>
+					<td>{{ crash.exception_type }}</td>
+					<td>{{ crash.classification }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+{% endblock %}
