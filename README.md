@@ -22,7 +22,14 @@ Node:
 Action
 -----
 
-{{ images!! }}
+Home Page
+![Home](http://i.imgur.com/xdPXUT8.jpg)
+
+Node View
+![Node](http://i.imgur.com/tq9EkX4.jpg)
+
+Crash View
+![Crash](http://i.imgur.com/f3eHtP7.jpg)
 
 
 Setup
