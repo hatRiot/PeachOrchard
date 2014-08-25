@@ -18,7 +18,7 @@ def register_node():
         return False
 
     data = {
-        "skey" : sha256(config.SERVER_KEY).hexdigest(),
+        "skey": sha256(config.SERVER_KEY).hexdigest(),
     }
 
     #
@@ -28,7 +28,7 @@ def register_node():
     url = "http://{0}:{1}/register/".format(config.SERVER_IP, config.SERVER_PORT)
     try:
         response = requests.post(url, data=data)
-    except Exception, e:
+    except Exception:
         return False
 
     if response.status_code is 200 and "Active" in response.content:
@@ -82,7 +82,7 @@ def log_hash():
     """ Fetches the SHA256 hash of the current session's status file.
     """
 
-    BLOCK_SIZE = 8960 # multiple of 256
+    BLOCK_SIZE = 8960  # multiple of 256
     if not os.path.isdir(config.MONITOR_DIR):
         return None
 
@@ -114,10 +114,10 @@ def register_crash(crash):
 
                 # crash does not exist on server, POST it
                 data = {
-                    "node_id" : config.NODE_ID,
-                    "skey" : sha256(config.SERVER_KEY).hexdigest(),
-                    "crash_idx" : str(cidx),
-                    "crash" : open(cpath).read()
+                    "node_id": config.NODE_ID,
+                    "skey": sha256(config.SERVER_KEY).hexdigest(),
+                    "crash_idx": str(cidx),
+                    "crash": open(cpath).read()
                 }
 
                 response = requests.post(base + "/crash/", data=json.dumps(data))
@@ -152,9 +152,9 @@ def send_status_update():
 
         # prepare to send
         data = {
-            "node_id" : config.NODE_ID,
-            "skey" : sha256(config.SERVER_KEY).hexdigest(),
-            "iteration" : status
+            "node_id": config.NODE_ID,
+            "skey": sha256(config.SERVER_KEY).hexdigest(),
+            "iteration": status
         }
 
         url = 'http://{0}:{1}/status/'.format(config.SERVER_IP, config.SERVER_PORT)

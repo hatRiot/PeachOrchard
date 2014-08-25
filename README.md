@@ -5,7 +5,7 @@ Peach Orchard is a web front-end to the Peach fuzzer; it provides a centralized 
 
 I'm bad at web design and have implemented a simple Django app with Bootstrap3; if you're a web guy who likes doing web things, I'd love PRs.
 
-This is similiar iSEC's [PeachFarmer](https://github.com/iSECPartners/PeachFarmer) project, but whilst that only aggregates logs, this provides a way of viewing the data.  Also has the added benefit of not opening up ports on all your fuzzing machines; Peach Orchard follows a strict push-only architecture, in which all fuzzers push data up to the core server; one IP, one port.
+This is similar iSEC's [PeachFarmer](https://github.com/iSECPartners/PeachFarmer) project, but whilst that only aggregates logs, this provides a way of viewing the data.  Also has the added benefit of not opening up ports on all your fuzzing machines; Peach Orchard follows a strict push-only architecture, in which all fuzzers push data up to the core server; one IP, one port.
 
 Requirements
 ----
