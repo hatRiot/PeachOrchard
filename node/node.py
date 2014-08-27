@@ -3,7 +3,7 @@ from src.core import node_resource as nr
 from src.core import monitor
 from src.core import config
 from src.core import utility
-from core.log import *
+from src.core.log import *
 import sys
 import os
 
@@ -29,9 +29,14 @@ def check_node():
 
         else:
             # grab latest session
-            config.SESSION = os.listdir(config.MONITOR_DIR)[-1]
-            utility.msg("Setting session to %s" % config.SESSION, LOG)
-            valid = True
+            tmp = os.listdir(config.MONITOR_DIR)
+            if len(tmp) <= 0:
+                utility.msg("No running sessions found", ERROR)
+                valid = False
+            else:
+                config.SESSION = tmp[-1]
+                utility.msg("Setting session to %s" % config.SESSION, LOG)
+                valid = True
 
     else:
         utility.msg("Directory '%s' not found" % config.MONITOR_DIR, ERROR)
