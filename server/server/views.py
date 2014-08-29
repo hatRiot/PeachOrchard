@@ -1,7 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from models import Node, Crash
 from hashlib import sha256
 from core.log import *
@@ -42,6 +42,14 @@ def node(request, node_id=-1):
                                          context_instance=RequestContext(request))
             else:
                 ret = HttpResponse("Invalid crash")
+
+        elif 'action' in request.GET:
+
+            action = request.GET.get("action")
+            if 'delete' in action:
+
+                vu.delete_node(node_id)
+                ret = HttpResponseRedirect("/")
 
         else:
             crashes = Crash.objects.filter(node_index=node)

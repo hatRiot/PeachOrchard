@@ -2,6 +2,7 @@ from server.core import utility
 from server.core.log import *
 from server.models import Crash, Node
 from hashlib import sha256
+from shutil import rmtree
 from re import findall
 import server.settings as settings
 import json
@@ -82,6 +83,24 @@ def _validate_node(request):
         node = None
         
     return node
+
+
+def delete_node(node_id):
+    """ Remove a node from the system
+    """
+
+    try:
+        node = Node.objects.get(id = node_id)
+        utility.msg("Removing node %s" % node_id, LOG)
+        node.delete()
+
+        # clear the node crash dir
+        ndir = settings.NODE_DIR + '/%s/' % node_id
+        if os.path.isdir(ndir):
+            rmtree(ndir)
+
+    except Exception, e:
+        utility.msg("Failed to fetch node %s: %s" % (node_id, e), LOG)
 
 
 def parse_key(key, data):

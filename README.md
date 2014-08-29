@@ -19,6 +19,8 @@ Node:
 * Requests >= 2.2.x (tested on 2.2.3)
 
 
+Tested on both Windows and Linux.
+
 Action
 -----
 
@@ -52,4 +54,8 @@ TODO
 
 * Beef up node logging
 * Add fuzzing-specific node information to the home page
+* Add support for other fuzzers?
+* Windows cmd colors
+* User authentication
+* Node session management (i.e. managing one node's successive fuzzing campaigns)
 * !?
