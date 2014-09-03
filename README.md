@@ -55,7 +55,6 @@ TODO
 * Beef up node logging
 * Add fuzzing-specific node information to the home page
 * Add support for other fuzzers?
-* Windows cmd colors
 * User authentication
 * Node session management (i.e. managing one node's successive fuzzing campaigns)
 * !?
