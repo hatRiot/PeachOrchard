@@ -2,9 +2,9 @@
 {% load bootstrap3 %}
 
 {% block content %}
-	<table class="table table-striped table-hover table-bordered table-condensed node-table">
-		<thead>
-			<tr>
+    <table class="table table-striped table-hover table-bordered table-condensed node-table">
+        <thead>
+            <tr>
                 <th>Node</th>
                 <th>Session</th>
                 <th>IP</th>
@@ -12,11 +12,11 @@
                 <th>State</th>
                 <th>Faults</th>
                 <th>Fuzzer In Use</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for node in nodes %}
-			<tr onclick="node_select(this.cells[0])">
+            </tr>
+        </thead>
+        <tbody>
+            {% for node in nodes %}
+            <tr onclick="node_select(this.cells[0])">
                 <td>{{ node.id }}</td>
                 <td>{{ node.session_name }}</td>
                 <td>{{ node.ip }}</td>
@@ -24,8 +24,8 @@
                 <td>{{ node.state }}</td>
                 <td>{{ node.faults }}</td>
                 <td>{{ node.session_fuzzer }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
