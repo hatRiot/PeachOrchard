@@ -7,9 +7,11 @@ class Node(models.Model):
 
     ip = models.CharField(max_length=17)
     start_time = models.CharField(max_length=30)
-    iteration = models.CharField(max_length=30)
+    state = models.TextField()
     active = models.BooleanField(default=False)
     faults = models.IntegerField(default=0)
+    session_name = models.TextField()
+    session_fuzzer = models.TextField()
 
 
 class Crash(models.Model):

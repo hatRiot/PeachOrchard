@@ -1,7 +1,7 @@
 Peach Orchard
 ==
 
-Peach Orchard is a web front-end to the Peach fuzzer; it provides a centralized server and distributed nodes that centralizes all crash and status information.  Each system that runs Peach can fire up an Orchard node that will send crash information back to the mothership, which will then be viewable from the web interface.  If you happen to run a dozen or so fuzzers like I do, this is a nice way to pull that information together to quickly check for any crashes.
+Peach Orchard is a web front-end to aggregate crash and status information for different fuzzers; it provides a centralized server and distributed nodes that centralizes all crash and status information.  Each system that runs a fuzzer can fire up an Orchard node that will send crash information back to the mothership, which will then be viewable from the web interface.  If you happen to run a dozen or so fuzzers like I do, this is a nice way to pull that information together to quickly check for any crashes.
 
 I'm bad at web design and have implemented a simple Django app with Bootstrap3; if you're a web guy who likes doing web things, I'd love PRs.
 
@@ -46,15 +46,35 @@ Pretty simple, really.  Fundamentally there are two bits of information a Peach 
   -- Location of the core server, naturally.
 
 * MONITOR_DIR  
-  -- Absolute path to your Peach Logs directory.  Please keep this as a raw string, otherwise it'll be angry with your Windows paths.
+  -- Absolute path to your output directory.  Please keep this as a raw string, otherwise it'll be angry with your Windows paths.
+
+To start the server, run `./start_server.sh`.  _If this is the first run, the database will be built and you'll need to create an administrative user.
+
+To start the node, ensure `config.py` is setup correctly, then run `python node.py -f [your fuzzer] -n [your session name]`.  
+
+Fuzzer Support
+----
+
+Currently PeachOrchard supports the following fuzzers:
+
+* Peach
+* American Fuzzy Lop (v0.45b+)
+
+On the to-do list:
+
+* Sulley
+* SPIKE
+
+Other requests welcome.
 
 
 TODO
 ----
 
 * Beef up node logging
-* Add fuzzing-specific node information to the home page
-* Add support for other fuzzers?
 * User authentication
+* Clean up code
 * Node session management (i.e. managing one node's successive fuzzing campaigns)
-* !?
+* Local caching for nodes if they lose connectivity to the mothership
+* Crashes page that aggregates all fuzzer crash information
+* Last-seen timestamp

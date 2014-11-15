@@ -109,4 +109,8 @@ def parse_key(key, data):
 
     value = findall("%s:(.*?)\n" % key.upper(), data)
     if value and len(value) > 0:
-        return value[0]
+        value = value[0]
+    else:
+        value = "UNKNOWN"
+
+    return value

@@ -94,7 +94,9 @@ def register(request):
         node = Node.objects.create(
             ip=request.META.get('REMOTE_ADDR'),
             active=True,
-            start_time=utility.timestamp()
+            start_time=utility.timestamp(),
+            session_name=request.POST.get("session"),
+            session_fuzzer=request.POST.get("fuzzer")
         )
 
         node.save()
@@ -156,7 +158,7 @@ def status(request):
 
     try:
         data = json.loads(request.body)
-        node.iteration = data['iteration']
+        node.state = data['state']
         node.save()
     except Exception:
         return HttpResponse("Bad node data")

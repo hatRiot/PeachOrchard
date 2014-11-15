@@ -1,11 +1,13 @@
+from src.core.fuzzer import Fuzzer
 from src.core import config
 from src.core.log import *
 from src.core import utility
 from hashlib import sha256
 from re import findall
+import pkgutil
+import importlib
 import fileinput
 import requests
-import os
 import json
 
 
@@ -19,6 +21,8 @@ def register_node():
 
     data = {
         "skey": sha256(config.SERVER_KEY).hexdigest(),
+        "fuzzer" : config.SESSION_FUZZER,
+        "session" : config.SESSION_NAME
     }
 
     #
@@ -55,8 +59,8 @@ def _write_id(node_id):
 
         print line,
 
-    # reload config module
-    reload(config)
+    # instead of force loading the config and losing state, just reassign
+    config.NODE_ID = node_id
 
 
 def check_server():
@@ -78,31 +82,14 @@ def check_server():
     utility.msg("Could not reach server.", ERROR)
 
 
-def log_hash():
-    """ Fetches the SHA256 hash of the current session's status file.
-    """
-
-    BLOCK_SIZE = 8960  # multiple of 256
-    if not os.path.isdir(config.MONITOR_DIR):
-        return None
-
-    with open(config.MONITOR_DIR + '/' + config.SESSION + '/status.txt') as f:
-        obj = sha256()
-        while True:
-            data = f.read(BLOCK_SIZE)
-            if not data:
-                break
-
-            obj.update(data)
-
-    return obj.hexdigest()
-
-
 def register_crash(crash):
     """ Accepts a dictionary of {crash_idx : crash_file_path} and attempts to
     POST them to the remote server.  If the server already has the crash data,
     it will not be sent.
     """
+
+    if len(crash.keys()) <= 0:
+        return
 
     base = 'http://{0}:{1}'.format(config.SERVER_IP, config.SERVER_PORT)
     uri = '/node/%d/?crash={0}' % config.NODE_ID
@@ -130,34 +117,19 @@ def register_crash(crash):
             utility.msg("Error contacting remote server: %s" % e, ERROR)                
 
 
-def send_status_update():
-    """ Pull the current iteration from the status file and post it to
-    the remote server
+def send_status_update(status):
+    """ Update the server with a fuzzer's status 
     """
 
     try:
-        data = None
-        spath = config.MONITOR_DIR + '/' + config.SESSION + '/' + 'status.txt'
-        with open(spath) as f:
-            data = f.read().split('\n')
 
-        # chop it up
-        status = None
-        data = [x for x in data if len(x) > 0]
-        if 'Test finished' in data[-1]:
-            status = 'Completed'
-        else:
-            (cidx, total) = findall("Iteration (.*?) of (.*?) :", data[-1])[0]
-            status = '%s/%s' % (cidx, total)
-
-        # prepare to send
         data = {
-            "node_id": config.NODE_ID,
-            "skey": sha256(config.SERVER_KEY).hexdigest(),
-            "iteration": status
+                "node_id" : config.NODE_ID,
+                "skey" : sha256(config.SERVER_KEY).hexdigest(),
+                "state" : status 
         }
 
-        url = 'http://{0}:{1}/status/'.format(config.SERVER_IP, config.SERVER_PORT)
+        url = "http://{0}:{1}/status/".format(config.SERVER_IP, config.SERVER_PORT)
         response = requests.post(url, data=json.dumps(data))
         if response.status_code is 200 and "Node Updated" in response.content:
             utility.msg("Status '%s' updated" % status, LOG)
@@ -166,3 +138,25 @@ def send_status_update():
 
     except Exception, e:
         utility.msg("Failed to send status update: %s" % e, ERROR)
+
+
+def load_fuzzer():
+    """ Dynamically load the specified fuzzer 
+    """
+
+    load = importlib.import_module("src.fuzzers")
+    modules = list(pkgutil.iter_modules(load.__path__))
+    for mod in modules:
+        
+        # pull up the module and iterate over its components, 
+        # stop once we find the correct class to invoke.
+        dp = mod[0].find_module(mod[1]).load_module(mod[1])
+        for e in dir(dp):
+
+            x = getattr(dp, e)
+            if e and e != "Fuzzer" and config.SESSION_FUZZER in e and\
+               issubclass(x, Fuzzer):
+                utility.msg("Loaded fuzzer %s" % e, LOG)
+                return x()
+
+    return None
