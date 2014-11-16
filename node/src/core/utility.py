@@ -1,5 +1,4 @@
 from datetime import date, datetime
-#from src.core.fuzzer import Fuzzer
 from src.core.log import *
 from inspect import isclass
 import src.core.fuzzer
@@ -15,6 +14,7 @@ def msg(string, level=INFO):
     """
 
     string = "[%s] %s" % (timestamp(), string)
+    color_string = None
     if 'linux' in platform.platform().lower():
         if level is INFO:
             color_string = '%s%s%s' % ('\033[32m', string, '\033[0m')
@@ -24,6 +24,9 @@ def msg(string, level=INFO):
             color_string = '%s%s%s' % ('\033[31m', string, '\033[0m')
         else:
             color_string = string
+
+    if not color_string:
+        color_string = string
 
     if level is DEBUG and not config.DEBUG:
         return
