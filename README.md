@@ -25,7 +25,7 @@ Action
 -----
 
 Home Page
-![Home](http://i.imgur.com/xdPXUT8.jpg)
+![Home](http://i.imgur.com/m3Jwze4.jpg)
 
 Node View
 ![Node](http://i.imgur.com/tq9EkX4.jpg)
