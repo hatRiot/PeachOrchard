@@ -57,3 +57,6 @@ server/server/core/secret_key.py
 
 # database
 po.db
+
+# PyCharm
+.idea/*
