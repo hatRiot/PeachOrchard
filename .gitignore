@@ -60,3 +60,4 @@ po.db
 
 # PyCharm
 .idea/*
+server/.idea/*

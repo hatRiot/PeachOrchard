@@ -71,7 +71,6 @@ def node(request, node_id=-1):
     return ret
 
 
-@check_login
 @csrf_exempt
 def register(request):
     """ Register a new node
@@ -112,7 +111,6 @@ def register(request):
     return HttpResponse("Node %d Active" % node.id)
 
 
-@check_login
 @csrf_exempt
 def crash(request):
     """ Register crash data with the server
@@ -153,7 +151,6 @@ def crash(request):
     return HttpResponse("Node updated")
 
 
-@check_login
 @csrf_exempt
 def status(request):
     """ Register node status update
