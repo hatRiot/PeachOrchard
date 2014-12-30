@@ -1,5 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.auth.views import logout, login
+from decorators import anonymous_required, check_login
+import settings
+
+
 admin.autodiscover()
 
 urlpatterns = patterns(
@@ -10,4 +15,6 @@ urlpatterns = patterns(
     url(r'^status/$', 'server.views.status', name='status'),
     url(r'^crash/$', 'server.views.crash', name='crash'),
     url(r'^admin/', include(admin.site.urls), name='admin'),
+    url(r'^' + settings.LOGIN_URL + '$', anonymous_required(login), {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', check_login(logout), {'next_page': '/'}, name='logout'),
 )

@@ -119,3 +119,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     (BASE_DIR + '/static'),
 )
+
+# Login settings
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login/'  # Used in urls.py, careful if changing it
+
+# Set to true if you want to enable authentication
+LOGIN_REQUIRED = False
+
