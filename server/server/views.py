@@ -5,28 +5,33 @@ from django.http import HttpResponse, HttpResponseRedirect
 from models import Node, Crash
 from hashlib import sha256
 from core.log import *
+from decorators import check_login
 import core.utility as utility
 import settings as settings
 import core.view_utility as vu
 import json
 
 
+@check_login
 def home(request):
     """ Load home template
     """
 
     nodes = Node.objects.all()
-    return render_to_response("home.html",
-                              {"nodes": nodes},
+    return render_to_response('home.html',
+                              {'nodes': nodes,
+                               'login_required': settings.LOGIN_REQUIRED},
                               context_instance=RequestContext(request))
 
 
+@check_login
 def node(request, node_id=-1):
     """ Load a node and render pertinent info
     """
 
     ret = render_to_response('node.html',
-                             {'node': False},
+                             {'node': False,
+                              'login_required': settings.LOGIN_REQUIRED},
                              context_instance=RequestContext(request))
 
     try:
@@ -38,14 +43,15 @@ def node(request, node_id=-1):
                 ret = render_to_response('crash.html',
                                          {'node': node,
                                           'crash_id': crash_id,
-                                          'crash': vu._get_crash_data(node.id, crash_id)},
+                                          'crash': vu._get_crash_data(node.id, crash_id),
+                                          'login_required': settings.LOGIN_REQUIRED},
                                          context_instance=RequestContext(request))
             else:
                 ret = HttpResponse("Invalid crash")
 
         elif 'action' in request.GET:
 
-            action = request.GET.get("action")
+            action = request.GET.get('action')
             if 'delete' in action:
 
                 vu.delete_node(node_id)
@@ -55,7 +61,8 @@ def node(request, node_id=-1):
             crashes = Crash.objects.filter(node_index=node)
             ret = render_to_response('node.html',
                                      {'node': node,
-                                     'crashes': crashes},
+                                     'crashes': crashes,
+                                     'login_required': settings.LOGIN_REQUIRED},
                                      context_instance=RequestContext(request))
 
     except Node.DoesNotExist:
@@ -95,8 +102,8 @@ def register(request):
             ip=request.META.get('REMOTE_ADDR'),
             active=True,
             start_time=utility.timestamp(),
-            session_name=request.POST.get("session"),
-            session_fuzzer=request.POST.get("fuzzer")
+            session_name=request.POST.get('session'),
+            session_fuzzer=request.POST.get('fuzzer')
         )
 
         node.save()
@@ -110,7 +117,7 @@ def crash(request):
     """
 
     if request.method != 'POST':
-        return HttpResponse('Invalid GET')
+        return HttpResponse("Invalid GET")
 
     node = vu._validate_node(request)
     if not node:
@@ -129,8 +136,8 @@ def crash(request):
             fault_index=data['crash_idx'],
             node_index=node,
             crash_time=utility.timestamp(),
-            exception_type=vu.parse_key("EXCEPTION_TYPE", data['crash']),
-            classification=vu.parse_key("CLASSIFICATION", data['crash'])
+            exception_type=vu.parse_key('EXCEPTION_TYPE', data['crash']),
+            classification=vu.parse_key('CLASSIFICATION', data['crash'])
         )
 
         crash.save()
@@ -149,7 +156,7 @@ def status(request):
     """ Register node status update
     """
 
-    if request.method != "POST":
+    if request.method != 'POST':
         return HttpResponse("Invalid GET")
 
     node = vu._validate_node(request)
