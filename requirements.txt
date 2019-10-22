@@ -1,4 +1,4 @@
-Django==1.6.5
+Django==1.11.23
 django-bootstrap3==4.11.0
 requests>=2.2.1
 wsgiref==0.1.2
